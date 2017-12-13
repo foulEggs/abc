@@ -1,0 +1,95 @@
+	#AiGrid {
+		position:relative;
+	}
+
+	#AiGrid .AI-PageLines {
+		width: 40%;
+		display:inline-block;
+	}
+
+	#AiGrid .AI-Paging {
+		width: 50%;
+		display:inline-block;
+	}
+
+	#AiGrid .first_btn {
+		/*background:url('/images/admin/common/sss_36.png');*/
+		background-repeat:no-repeat;
+		width:20px;
+		height:10px;
+		display: inline-block;
+		margin-right:10px;
+		cursor:pointer;
+		text-align:center;
+	}
+
+	#AiGrid .prev_btn {
+		/*background:url('/images/admin/common/sss_38.png');*/
+		background-repeat:no-repeat;
+		width:20px;
+		height:10px;
+		display: inline-block;
+		margin-right:10px;
+		cursor:pointer;
+		text-align:center;
+	}
+
+	#AiGrid .next_btn {
+		/*background:url('/images/admin/common/sss_38s.png');*/
+		background-repeat:no-repeat;
+		width:20px;
+		height:10px;
+		display: inline-block;
+		margin-right:10px;
+		cursor:pointer;
+		text-align:center;
+	}
+
+	#AiGrid .last_btn {
+		/*background:url('/images/admin/common/sss_36s.png');*/
+		background-repeat:no-repeat;
+		width:20px;
+		height:10px;
+		display: inline-block;
+		margin-right:10px;
+		cursor:pointer;
+		text-align:center;
+	}
+
+	#AiGrid .skip_btn {
+		margin-left:10px;
+		cursor:pointer;
+	}
+
+	#AiGrid .pagenum span{
+		cursor:pointer;
+		margin-right:10px;
+	}
+
+	#AiGrid .active {
+		font-weight:bold;
+		cursor:default;
+	}
+
+	#AiGrid .totalpage {
+		margin-right:10px;
+	}
+
+	#AiGrid .skippage input {
+		height: 32px;
+		border: 1px solid #DEDEDE;
+		border-radius: 4px;
+		padding: 0 5px 0 5px;
+		outline: none;
+	}
+
+	#AiGrid .pagelines {
+		width: 69px;
+		height: 32px;
+		border: 1px solid #CFCFCF;
+		/*background: url(/images/admin/common/xialad_03.png) no-repeat center right;*/
+		-webkit-appearance: none;
+		border-radius: 3px;
+		padding-left: 8px;
+		outline: none;
+	}
