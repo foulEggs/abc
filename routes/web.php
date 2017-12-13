@@ -20,6 +20,7 @@ Route::group(['prefix' => 'view', 'middleware' => 'auth'], function(){
 	Route::get('menus', "MenusController@view");
 	Route::get('repositories', "RepositoriesController@view");
 	Route::get('uris', "UrisController@view");
+	Route::get('permissions', "PermissionsController@view");
 	Route::get('districts', function(){return view('system.districts');});
 	Route::get('accept_channel', "AcceptChannelsController@view");
 	Route::get('payment_channel', "PaymentChannelsController@view");

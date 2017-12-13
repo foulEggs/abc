@@ -23,7 +23,7 @@
 	
 	var page_objs = [];
 
-	var main_addr = '/system/menus';
+	var main_addr = '/system/uris';
 	
 	/* 域变量容器 */
 	var scope_vars = [];
@@ -31,19 +31,14 @@
 	var form_validate = $(".data-form").validate();
 
 	$('.btn-back').click(function(){
-		var menu_level = parseInt(sessionStorage.getItem('menu_level'));
-		sessionStorage.setItem('menu_level', menu_level-1);
-		get_list(1, Paging.GetPageLines());
-
-		if(menu_level == 2) {
-			$(this).hide();
-		}
+		window.location.hash = '#/view-repositories';
 	});
 
-	if(sessionStorage.getItem('menu_level') > 1) {
-		$('.btn-back').show();
-	}
+	$('#form-search').find('select[name="repository_id"]').change(function(){
+		sessionStorage.setItem('repository_id', $(this).val());
 
+		get_list(1, Paging.GetPageLines());
+	});
 	
 	/* 解析模板标签 */
 	function analysis_template (data, base_template) {
@@ -67,10 +62,9 @@
 		page_objs['line']  = currentline;
 		
 		var template_str = $('#table_template').html();
-
-		var level = sessionStorage.getItem('menu_level');
-		var parent_id = sessionStorage.getItem("menu_parent_id_"+level) == undefined ? 0 : sessionStorage.getItem("menu_parent_id_"+level);
-
+		
+		var repository_id = sessionStorage.getItem('repository_id');
+		
 		if (submit_flag === false) {
 			
 			submit_flag = true;
@@ -86,7 +80,7 @@
 			}
 			
 			$.ajax({
-				url     :main_addr+'?page='+currentpage+'&limit='+currentline+'&search=parent_id:'+parent_id+'&searchFields=parent_id:=',
+				url     :main_addr+'?page='+currentpage+'&limit='+currentline+'&search=repository_id:'+repository_id+'&searchFields=repository_id:=',
 				type    :'get',
 				dataType:'json',
 				success:function (result) {
@@ -109,26 +103,6 @@
 							get_data($(this).attr('dataid'));
 						});
 
-						if(sessionStorage.getItem('menu_level') == 3) {
-							$('button.btn-child').hide();
-						} else {
-							$('button.btn-child').show();
-
-							$('button.btn-child').on('click', function () {
-								var level = parseInt($(this).attr('level'));
-								sessionStorage.setItem('menu_parent_id_'+(level+1), $(this).attr('dataid'));
-								sessionStorage.setItem('menu_level', level+1);
-								get_list(1, Paging.GetPageLines());
-
-								$('.btn-back').show();
-							});
-						}
-
-						$('button.btn-permission').click(function(){
-							sessionStorage.setItem('menu_id', $(this).attr('dataid'));
-							window.location.hash = '#/view-permissions';
-						});
-
 						$('button.btn-edit').on('click', function () {
 						
 							pop_modal.call(this, 'edit-detail','','edit');
@@ -145,7 +119,7 @@
 					Paging.SetCurrentPage(currentpage);
 					Paging.SetPageLines(currentline);
 					Paging.DataPagecontrol.SetDataTotal(result['total']);
-					Paging.DataPagecontrol.SetDataSource([''].concat(result['datas']));
+					Paging.DataPagecontrol.SetDataSource([''].concat(result['data']));
 					Paging.DataPagecontrol.Refresh();
 					
 					submit_flag = false;
@@ -190,23 +164,19 @@
 			
 			if (form_validate.form()) {
 				
-				submit_flag = false;
+				submit_flag = true;
 			
 				var modal_pop = $('#edit-detail');
 				
 				var data_form = modal_pop.find('.data-form');
 
-				var data = data_form.serializeArray();
-
-				var menu_level = sessionStorage.getItem('menu_level');
-				var menu_parent_id = sessionStorage.getItem('menu_parent_id_'+menu_level);
-
-				data.push({'name':'parent_id','value':menu_parent_id == undefined ? 0 : menu_parent_id});
-				data.push({'name':'level','value':menu_level == undefined ? 1 : menu_level});
-
 				var id = $("#id").val();
 
 				var _url = id>0?'/'+id:'';
+
+				var data = data_form.serializeArray();
+				data.push({'name':'repository_id','value':sessionStorage.getItem('repository_id')});
+				//console.log(data);
 				
 				$.ajax({
 					url :main_addr+_url,
@@ -351,20 +321,17 @@
 		modal_pop.modal({'backdrop': backdrop, 'keyboard':false});
 
 		modal_pop.find('input[type="text"][name],input[type="hidden"][name="id"],textarea[name]').val('');
-
-		modal_pop.find('input[type="checkbox"]').each(function(){
-			$(this).attr('checked',false);
-		});
 		
 		modal_pop.find('select[name]').each(function () {
 			this.selectedIndex = 0;
 		});
-		
+
 		modal_pop.on('hidden.bs.modal', function () {
 			form_validate.resetForm();
 			form_validate.reset();
 			submit_flag = false;
 			$(this).off('hidden.bs.modal');
+			
 		});
 		
 	}
@@ -426,6 +393,7 @@
 	});
 	
 	$('button.btn-save').on('click', function () {
+		
 		save_data();
 	});
 	
